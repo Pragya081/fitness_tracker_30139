@@ -1,0 +1,41 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    weight_kg DECIMAL
+);
+
+CREATE TABLE friends (
+    user_id INT NOT NULL,
+    friend_id INT NOT NULL,
+    PRIMARY KEY (user_id, friend_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (friend_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE goals (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    description TEXT NOT NULL,
+    target_value INT,
+    current_value INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE workouts (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    workout_date DATE NOT NULL,
+    duration_minutes INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE exercises (
+    id SERIAL PRIMARY KEY,
+    workout_id INT NOT NULL,
+    exercise_name VARCHAR(255) NOT NULL,
+    sets INT,
+    reps INT,
+    weight_kg DECIMAL,
+    FOREIGN KEY (workout_id) REFERENCES workouts(id) ON DELETE CASCADE
+);
